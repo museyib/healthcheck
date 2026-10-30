@@ -2,6 +2,7 @@ package llc.devlab.app.repository;
 
 import llc.devlab.app.model.dto.HealthAggregateData;
 import llc.devlab.app.model.entity.HealthCheckResult;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -23,9 +24,9 @@ public interface HealthCheckResultRepository extends JpaRepository<HealthCheckRe
             SELECT h FROM HealthCheckResult h
             WHERE h.service.id = ?1
                         AND h.checkedAt BETWEEN ?2 AND ?3
-            ORDER BY h.checkedAt DESC
-            LIMIT 50""")
+            ORDER BY h.checkedAt DESC""")
     List<HealthCheckResult> getCheckResultHistory(long serviceId,
                                                   Instant checkedAtAfter,
-                                                  Instant checkedAtBefore);
+                                                  Instant checkedAtBefore,
+                                                  Pageable pageable);
 }

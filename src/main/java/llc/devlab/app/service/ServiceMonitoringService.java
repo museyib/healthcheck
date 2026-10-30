@@ -8,6 +8,7 @@ import llc.devlab.app.model.entity.MonitoredService;
 import llc.devlab.app.repository.HealthCheckResultRepository;
 import llc.devlab.app.repository.MonitoredServiceRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +35,10 @@ public class ServiceMonitoringService {
         Instant fromInstant = parse(from);
         Instant toInstant = parse(to);
 
+        if (fromInstant.isAfter(toInstant)) {
+            throw new ValidationException("From date must be before to date");
+        }
+
         HealthAggregateData aggregateData = healthCheckResultRepository.getHealthAggregateData(
                 serviceId,
                 fromInstant,
@@ -42,7 +47,8 @@ public class ServiceMonitoringService {
         List<HealthCheckResult> results = healthCheckResultRepository.getCheckResultHistory(
                 serviceId,
                 fromInstant,
-                toInstant);
+                toInstant,
+                PageRequest.of(0, 50));
 
         String serviceName = monitoredServiceRepository.findById(serviceId).map(MonitoredService::getName).orElse("Unknown");
 
