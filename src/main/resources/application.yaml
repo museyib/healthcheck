@@ -30,7 +30,6 @@ management:
       exposure:
         include:
           - metrics
-          - actuator
           - health
 
 monitoring:
@@ -39,8 +38,8 @@ monitoring:
   dependency:
     url: ${MONITORING_DEPENDENCY_URL:https://httpbin.org/status/200}
   http:
-    connect-timeout: 5000
-    read-timeout: 5000
+    connect-timeout: 5
+    read-timeout: 5
 
 server:
   port: 8090

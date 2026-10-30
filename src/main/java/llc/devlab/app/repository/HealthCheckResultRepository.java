@@ -7,11 +7,10 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Optional;
 
 public interface HealthCheckResultRepository extends JpaRepository<HealthCheckResult, Long> {
     @Query("""
-            SELECT COALESCE(SUM(CASE WHEN h.status = 'UP' THEN 1 ELSE 0 END) / COUNT(h) * 100, 0) uptimePercentage,
+            SELECT COALESCE(SUM(CASE WHEN h.status = 'UP' THEN 1.0 ELSE 0.0 END) / COUNT(h) * 100, 0) uptimePercentage,
                    COALESCE(AVG(h.responseTimeMs), 0)    responseTimeAvg
             FROM HealthCheckResult h
             WHERE h.service.id = ?1
@@ -24,7 +23,8 @@ public interface HealthCheckResultRepository extends JpaRepository<HealthCheckRe
             SELECT h FROM HealthCheckResult h
             WHERE h.service.id = ?1
                         AND h.checkedAt BETWEEN ?2 AND ?3
-            ORDER BY h.checkedAt DESC""")
+            ORDER BY h.checkedAt DESC
+            LIMIT 50""")
     List<HealthCheckResult> getCheckResultHistory(long serviceId,
                                                   Instant checkedAtAfter,
                                                   Instant checkedAtBefore);

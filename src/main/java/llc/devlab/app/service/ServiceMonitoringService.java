@@ -1,5 +1,6 @@
 package llc.devlab.app.service;
 
+import llc.devlab.app.exception.ValidationException;
 import llc.devlab.app.model.dto.HealthAggregateData;
 import llc.devlab.app.model.dto.HealthResponse;
 import llc.devlab.app.model.entity.HealthCheckResult;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.time.format.DateTimeParseException;
 import java.util.Comparator;
 import java.util.List;
 
@@ -29,8 +31,8 @@ public class ServiceMonitoringService {
     }
 
     public HealthResponse getHealthResponses(long serviceId, String from, String to) {
-        Instant fromInstant = Instant.parse(from);
-        Instant toInstant = Instant.parse(to);
+        Instant fromInstant = parse(from);
+        Instant toInstant = parse(to);
 
         HealthAggregateData aggregateData = healthCheckResultRepository.getHealthAggregateData(
                 serviceId,
@@ -50,7 +52,6 @@ public class ServiceMonitoringService {
                         result.getStatus().name(),
                         result.getResponseTimeMs()))
                 .sorted(Comparator.comparing(HealthResponse.CheckItem::checkedAt).reversed())
-                .limit(50)
                 .toList();
 
         return new HealthResponse(
@@ -61,5 +62,13 @@ public class ServiceMonitoringService {
                 aggregateData.uptimePercentage(),
                 aggregateData.responseTimeAvg(),
                 checkItems);
+    }
+
+    private Instant parse(String instantString) {
+        try {
+            return Instant.parse(instantString);
+        } catch (DateTimeParseException | IllegalArgumentException e) {
+            throw new ValidationException("Invalid instant string format: " + instantString);
+        }
     }
 }

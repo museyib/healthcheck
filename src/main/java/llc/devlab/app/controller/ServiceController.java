@@ -39,9 +39,8 @@ public class ServiceController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ServiceResponse> update(@PathVariable Long id,
-                                                  @Valid @RequestBody UpdateServiceRequest request) {
-        return ResponseEntity.ok(monitoredServiceService.update(id, request));
+    @PutMapping
+    public ResponseEntity<ServiceResponse> update(@Valid @RequestBody UpdateServiceRequest request) {
+        return ResponseEntity.ok(monitoredServiceService.update(request));
     }
 }

@@ -76,7 +76,7 @@ class ServiceRegistryIntegrationTest {
                 .andExpect(jsonPath("$[0].id").value(id))
                 .andExpect(jsonPath("$[0].name").value("payments"));
 
-        mockMvc.perform(put("/api/services/{id}", id)
+        mockMvc.perform(put("/api/services")
                         .with(httpBasic("integration", "integration-password"))
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)

@@ -22,12 +22,12 @@ management:
 
 monitoring:
   scheduler:
-    poll-interval: 3600000
+    poll-interval: 1000
   dependency:
     url: http://127.0.0.1:1/unused
   http:
-    connect-timeout: 5000
-    read-timeout: 5000
+    connect-timeout: 5
+    read-timeout: 5
 
 app:
   username: integration
