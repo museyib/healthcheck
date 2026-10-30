@@ -1,5 +1,6 @@
 package llc.devlab.app.controller;
 
+import jakarta.validation.Valid;
 import llc.devlab.app.model.dto.CreateServiceRequest;
 import llc.devlab.app.model.dto.ServiceResponse;
 import llc.devlab.app.model.dto.UpdateServiceRequest;
@@ -28,7 +29,7 @@ public class ServiceController {
     }
 
     @PostMapping
-    public ResponseEntity<ServiceResponse> create(@RequestBody CreateServiceRequest request) {
+    public ResponseEntity<ServiceResponse> create(@Valid @RequestBody CreateServiceRequest request) {
         return ResponseEntity.ok(monitoredServiceService.create(request));
     }
 
@@ -39,7 +40,8 @@ public class ServiceController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ServiceResponse> update(@PathVariable Long id, @RequestBody UpdateServiceRequest request) {
+    public ResponseEntity<ServiceResponse> update(@PathVariable Long id,
+                                                  @Valid @RequestBody UpdateServiceRequest request) {
         return ResponseEntity.ok(monitoredServiceService.update(id, request));
     }
 }

@@ -38,11 +38,14 @@ monitoring:
     poll-interval: 1000
   dependency:
     url: ${MONITORING_DEPENDENCY_URL:https://httpbin.org/status/200}
+  http:
+    connect-timeout: 5000
+    read-timeout: 5000
 
 server:
   port: 8090
 
 app:
   username: ${APP_USERNAME:monitor}
-  password: ${APP_PASSWORD:monitor}
+  password: ${APP_PASSWORD}
   role: ${APP_ROLE:MONITOR}

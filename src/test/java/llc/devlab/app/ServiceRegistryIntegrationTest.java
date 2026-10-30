@@ -29,6 +29,19 @@ class ServiceRegistryIntegrationTest {
     private ScheduleService scheduleService;
 
     @Test
+    void unauthenticatedRequestToServicesIsRejected() throws Exception {
+        mockMvc.perform(get("/api/services"))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void authenticatedRequestToServicesIsAllowed() throws Exception {
+        mockMvc.perform(get("/api/services")
+                        .with(httpBasic("integration", "integration-password")))
+                .andExpect(status().isOk());
+    }
+
+    @Test
     void serviceCanBeCreatedReadUpdatedAndDeletedOverHttp() throws Exception {
         var createResult = mockMvc.perform(post("/api/services")
                         .with(httpBasic("integration", "integration-password"))
@@ -37,14 +50,14 @@ class ServiceRegistryIntegrationTest {
                         .content("""
                                 {
                                   "name": "payments",
-                                  "url": "https://payments.example",
+                                  "url": "https://www.payments.com",
                                   "checkInterval": 30,
                                   "critical": true
                                 }
                                 """))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("payments"))
-                .andExpect(jsonPath("$.url").value("https://payments.example"))
+                .andExpect(jsonPath("$.url").value("https://www.payments.com"))
                 .andExpect(jsonPath("$.checkInterval").value(30))
                 .andExpect(jsonPath("$.critical").value(true))
                 .andReturn();
@@ -71,7 +84,7 @@ class ServiceRegistryIntegrationTest {
                                 {
                                   "id": %d,
                                   "name": "payments-updated",
-                                  "url": "https://payments-updated.example",
+                                  "url": "https://www.payments-updated.com",
                                   "checkInterval": 60,
                                   "critical": false
                                 }
@@ -79,7 +92,7 @@ class ServiceRegistryIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(id))
                 .andExpect(jsonPath("$.name").value("payments-updated"))
-                .andExpect(jsonPath("$.url").value("https://payments-updated.example"))
+                .andExpect(jsonPath("$.url").value("https://www.payments-updated.com"))
                 .andExpect(jsonPath("$.checkInterval").value(60))
                 .andExpect(jsonPath("$.critical").value(false));
 

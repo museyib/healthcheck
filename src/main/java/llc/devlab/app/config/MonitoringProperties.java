@@ -6,8 +6,6 @@ import jakarta.validation.constraints.NotBlank;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
-import java.time.Duration;
-
 @Validated
 @ConfigurationProperties(prefix = "monitoring")
 public record MonitoringProperties(
@@ -20,8 +18,8 @@ public record MonitoringProperties(
     ) {}
 
     public record Http(
-            @Min(1) Duration connectTimeout,
-            @Min(1) Duration readTimeout
+            @Min(1) int connectTimeout,
+            @Min(1) int readTimeout
     ) {}
 
     public record Dependency(

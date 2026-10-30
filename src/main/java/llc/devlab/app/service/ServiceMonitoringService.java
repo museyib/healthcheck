@@ -47,6 +47,7 @@ public class ServiceMonitoringService {
                         result.getStatus().name(),
                         result.getResponseTimeMs()))
                 .sorted(Comparator.comparing(HealthResponse.CheckItem::checkedAt).reversed())
+                .limit(50)
                 .toList();
 
         return new HealthResponse(

@@ -12,6 +12,10 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
 
 management:
+  endpoints:
+    web:
+      exposure:
+        include: metrics,health
   endpoint:
     health:
       show-details: always
@@ -21,6 +25,9 @@ monitoring:
     poll-interval: 3600000
   dependency:
     url: http://127.0.0.1:1/unused
+  http:
+    connect-timeout: 5000
+    read-timeout: 5000
 
 app:
   username: integration

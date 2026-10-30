@@ -14,14 +14,14 @@ import java.time.Duration;
 public class RestClientConfig {
 
     @Bean
-    public RestClient restClient(RestClient.Builder builder) {
+    public RestClient restClient(RestClient.Builder builder, MonitoringProperties monitoringProperties) {
         HttpClient httpClient = HttpClient.newBuilder()
-                .connectTimeout(Duration.ofSeconds(3))
+                .connectTimeout(Duration.ofSeconds(monitoringProperties.http().connectTimeout()))
                 .build();
 
         JdkClientHttpRequestFactory requestFactory = new JdkClientHttpRequestFactory(httpClient);
 
-        requestFactory.setReadTimeout(Duration.ofSeconds(3));
+        requestFactory.setReadTimeout(Duration.ofSeconds(monitoringProperties.http().readTimeout()));
 
         return builder
                 .requestFactory(requestFactory)

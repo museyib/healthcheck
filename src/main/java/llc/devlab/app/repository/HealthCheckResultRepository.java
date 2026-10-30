@@ -12,8 +12,7 @@ public interface HealthCheckResultRepository extends JpaRepository<HealthCheckRe
             SELECT h FROM HealthCheckResult h
             WHERE h.service.id = ?1
                         AND h.checkedAt BETWEEN ?2 AND ?3
-            ORDER BY h.checkedAt DESC
-            LIMIT 50""")
+            ORDER BY h.checkedAt DESC""")
     List<HealthCheckResult> getCheckResultHistory(long serviceId,
                                                   Instant checkedAtAfter,
                                                   Instant checkedAtBefore);
