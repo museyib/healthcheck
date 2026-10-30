@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -31,7 +32,10 @@ public class ServiceMonitoringService {
         Instant fromInstant = Instant.parse(from);
         Instant toInstant = Instant.parse(to);
 
-        List<HealthCheckResult> results = healthCheckResultRepository.findAllByServiceIdAndCheckedAtBetween(serviceId, fromInstant, toInstant);
+        List<HealthCheckResult> results = healthCheckResultRepository.getCheckResultHistory(
+                serviceId,
+                fromInstant,
+                toInstant);
 
         double uptimePercentage = calculateUptimePercentage(results);
         double responseTimeAvg = calculateResponseTimeAvg(results);
@@ -42,6 +46,7 @@ public class ServiceMonitoringService {
                         result.getCheckedAt().toString(),
                         result.getStatus().name(),
                         result.getResponseTimeMs()))
+                .sorted(Comparator.comparing(HealthResponse.CheckItem::checkedAt).reversed())
                 .toList();
 
         return new HealthResponse(

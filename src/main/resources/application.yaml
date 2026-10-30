@@ -21,7 +21,7 @@ spring:
 management:
   endpoint:
     health:
-      show-details: always
+      show-details: when-authorized
       probes:
         enabled: true
 
@@ -36,6 +36,13 @@ management:
 monitoring:
   scheduler:
     poll-interval: 1000
+  dependency:
+    url: ${MONITORING_DEPENDENCY_URL:https://httpbin.org/status/200}
 
 server:
   port: 8090
+
+app:
+  username: ${APP_USERNAME:monitor}
+  password: ${APP_PASSWORD:monitor}
+  role: ${APP_ROLE:MONITOR}

@@ -1,0 +1,28 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:healthcheck;DB_CLOSE_DELAY=-1
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    open-in-view: false
+    show-sql: false
+    database-platform: org.hibernate.dialect.H2Dialect
+
+management:
+  endpoint:
+    health:
+      show-details: always
+
+monitoring:
+  scheduler:
+    poll-interval: 3600000
+  dependency:
+    url: http://127.0.0.1:1/unused
+
+app:
+  username: integration
+  password: integration-password
+  role: MONITOR
