@@ -48,4 +48,3 @@ server:
 app:
   username: ${APP_USERNAME:monitor}
   password: ${APP_PASSWORD}
-  role: ${APP_ROLE:MONITOR}

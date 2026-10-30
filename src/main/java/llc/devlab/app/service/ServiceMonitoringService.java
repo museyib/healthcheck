@@ -1,6 +1,6 @@
 package llc.devlab.app.service;
 
-import llc.devlab.app.enums.HealthStatus;
+import llc.devlab.app.model.dto.HealthAggregateData;
 import llc.devlab.app.model.dto.HealthResponse;
 import llc.devlab.app.model.entity.HealthCheckResult;
 import llc.devlab.app.model.entity.MonitoredService;
@@ -32,13 +32,16 @@ public class ServiceMonitoringService {
         Instant fromInstant = Instant.parse(from);
         Instant toInstant = Instant.parse(to);
 
+        HealthAggregateData aggregateData = healthCheckResultRepository.getHealthAggregateData(
+                serviceId,
+                fromInstant,
+                toInstant);
+
         List<HealthCheckResult> results = healthCheckResultRepository.getCheckResultHistory(
                 serviceId,
                 fromInstant,
                 toInstant);
 
-        double uptimePercentage = calculateUptimePercentage(results);
-        double responseTimeAvg = calculateResponseTimeAvg(results);
         String serviceName = monitoredServiceRepository.findById(serviceId).map(MonitoredService::getName).orElse("Unknown");
 
         List<HealthResponse.CheckItem> checkItems = results.stream()
@@ -55,21 +58,8 @@ public class ServiceMonitoringService {
                 serviceName,
                 from,
                 to,
-                uptimePercentage,
-                responseTimeAvg,
+                aggregateData.uptimePercentage(),
+                aggregateData.responseTimeAvg(),
                 checkItems);
-    }
-
-    private double calculateResponseTimeAvg(List<HealthCheckResult> results) {
-        return results.stream()
-                .mapToDouble(HealthCheckResult::getResponseTimeMs)
-                .average()
-                .orElse(0);
-    }
-
-    private double calculateUptimePercentage(List<HealthCheckResult> results) {
-        long totalChecks = results.size();
-        long healthyChecks = results.stream().filter(item -> item.getStatus().equals(HealthStatus.UP)).count();
-        return (double) healthyChecks / totalChecks * 100;
     }
 }

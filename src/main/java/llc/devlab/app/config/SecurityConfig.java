@@ -32,7 +32,6 @@ public class SecurityConfig {
                                 "/actuator/health/**",
                                 "/actuator/info"
                         ).permitAll()
-                        .requestMatchers("/actuator/**").hasRole("MONITOR")
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
@@ -50,7 +49,6 @@ public class SecurityConfig {
 
         UserDetails monitor = User.withUsername(properties.username())
                 .password(passwordEncoder.encode(properties.password()))
-                .roles(properties.role())
                 .build();
 
         return new InMemoryUserDetailsManager(monitor);
