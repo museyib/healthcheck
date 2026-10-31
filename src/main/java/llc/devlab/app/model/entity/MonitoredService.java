@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Setter
 @Getter
@@ -23,4 +25,11 @@ public class MonitoredService {
     private Instant createdAt = Instant.now();
     private Instant updatedAt;
     private Instant lastCheckedAt;
+    private boolean enabled;
+
+    @ManyToMany
+    @JoinTable(name = "service_dependency",
+            joinColumns = @JoinColumn(name = "service_id"),
+            inverseJoinColumns = @JoinColumn(name = "dependency_id"))
+    private Set<MonitoredService> dependencies = new LinkedHashSet<>();
 }

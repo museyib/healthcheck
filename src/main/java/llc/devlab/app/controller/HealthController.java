@@ -1,10 +1,13 @@
 package llc.devlab.app.controller;
 
 import llc.devlab.app.model.dto.HealthResponse;
+import llc.devlab.app.model.dto.ServiceSummary;
 import llc.devlab.app.service.ServiceMonitoringService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/services")
@@ -18,5 +21,10 @@ public class HealthController {
                                                      @RequestParam String from,
                                                      @RequestParam String to) {
         return ResponseEntity.ok(serviceMonitoringService.getHealthResponses(id, from, to));
+    }
+
+    @GetMapping("/summary")
+    public ResponseEntity<List<ServiceSummary>> getServiceSummary() {
+        return ResponseEntity.ok(serviceMonitoringService.serviceSummary());
     }
 }

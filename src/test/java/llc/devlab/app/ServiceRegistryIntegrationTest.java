@@ -52,7 +52,8 @@ class ServiceRegistryIntegrationTest {
                                   "name": "payments",
                                   "url": "https://www.payments.com",
                                   "checkInterval": 30,
-                                  "critical": true
+                                  "critical": true,
+                                  "enabled": true
                                 }
                                 """))
                 .andExpect(status().isOk())
@@ -60,6 +61,7 @@ class ServiceRegistryIntegrationTest {
                 .andExpect(jsonPath("$.url").value("https://www.payments.com"))
                 .andExpect(jsonPath("$.checkInterval").value(30))
                 .andExpect(jsonPath("$.critical").value(true))
+                .andExpect(jsonPath("$.enabled").value(true))
                 .andReturn();
         long id = Long.parseLong(createResult.getResponse().getContentAsString()
                 .replaceAll("(?s).*?\"id\"\\s*:\\s*(\\d+).*", "$1"));
@@ -86,7 +88,8 @@ class ServiceRegistryIntegrationTest {
                                   "name": "payments-updated",
                                   "url": "https://www.payments-updated.com",
                                   "checkInterval": 60,
-                                  "critical": false
+                                  "critical": false,
+                                  "enabled": true
                                 }
                                 """.formatted(id)))
                 .andExpect(status().isOk())

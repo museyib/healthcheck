@@ -9,8 +9,9 @@ import java.util.List;
 public interface MonitoredServiceRepository extends JpaRepository<MonitoredService, Long> {
     @Query(value = """
                     SELECT * FROM monitored_service s
-                     WHERE s.last_checked_at IS NULL
-                            OR s.last_checked_at < (CURRENT_TIMESTAMP - (s.check_interval || ' second')::interval)""",
+                     WHERE (s.last_checked_at IS NULL
+                            OR s.last_checked_at < (CURRENT_TIMESTAMP - (s.check_interval || ' second')::interval))
+                           AND s.enabled = true""",
             nativeQuery = true)
     List<MonitoredService> findServicesDueForCheck();
 }

@@ -12,6 +12,8 @@ services:
       DB_URL: jdbc:postgresql://db:5432/healthcheck
       DB_USERNAME: postgres
       DB_PASSWORD: postgres
+      APP_USERNAME: ${APP_USERNAME:-monitor}
+      APP_PASSWORD: ${APP_PASSWORD:?APP_PASSWORD must be set}
     depends_on:
       - db
 

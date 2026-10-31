@@ -60,6 +60,7 @@ Service registry and history endpoints require HTTP Basic authentication using t
 | Method | Path | Description |
 | --- | --- | --- |
 | `GET` | `/api/services` | List registered services |
+| `GET` | `/api/services/dependency-graph` | Get service nodes and dependency edges |
 | `GET` | `/api/services/{id}` | Get a service by ID |
 | `POST` | `/api/services` | Register a service |
 | `PUT` | `/api/services` | Update a service; include its ID in the body |
@@ -71,9 +72,11 @@ Create a service (the `checkInterval` is in seconds and must be at least 5):
 ```bash
 curl -u monitor:monitor \
   -H 'Content-Type: application/json' \
-  -d '{"name":"payments","url":"https://example.com/health","checkInterval":30,"critical":true}' \
+  -d '{"name":"payments","url":"https://example.com/health","checkInterval":30,"critical":true,"dependsOn":[1,2]}' \
   http://localhost:8090/api/services
 ```
+
+`dependsOn` is an optional list of registered service IDs. Service responses include the same list. The dependency graph endpoint returns `nodes` (`id` and `name`) and `edges`; each edge's `serviceId` depends on its `dependencyId`.
 
 Read the service list and check history (use UTC ISO-8601 instants):
 

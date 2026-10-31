@@ -3,6 +3,7 @@ package llc.devlab.app.service;
 import llc.devlab.app.exception.ValidationException;
 import llc.devlab.app.model.dto.HealthAggregateData;
 import llc.devlab.app.model.dto.HealthResponse;
+import llc.devlab.app.model.dto.ServiceSummary;
 import llc.devlab.app.model.entity.HealthCheckResult;
 import llc.devlab.app.model.entity.MonitoredService;
 import llc.devlab.app.repository.HealthCheckResultRepository;
@@ -68,6 +69,10 @@ public class ServiceMonitoringService {
                 aggregateData.uptimePercentage(),
                 aggregateData.responseTimeAvg(),
                 checkItems);
+    }
+
+    public List<ServiceSummary> serviceSummary() {
+        return healthCheckResultRepository.getHealthAggregateData();
     }
 
     private Instant parse(String instantString) {

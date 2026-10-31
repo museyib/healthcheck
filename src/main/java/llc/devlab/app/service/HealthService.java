@@ -66,6 +66,7 @@ public class HealthService {
             }
         } else {
             healthCheckCounterUp.increment();
+            statusMap.remove(service.getId());
         }
     }
 

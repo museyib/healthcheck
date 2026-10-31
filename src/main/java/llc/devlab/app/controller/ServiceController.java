@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import llc.devlab.app.model.dto.CreateServiceRequest;
 import llc.devlab.app.model.dto.ServiceResponse;
 import llc.devlab.app.model.dto.UpdateServiceRequest;
+import llc.devlab.app.model.dto.ServiceDependencyGraph;
 import llc.devlab.app.service.MonitoredServiceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,11 @@ public class ServiceController {
     @GetMapping
     public ResponseEntity<List<ServiceResponse>> getAll() {
         return ResponseEntity.ok(monitoredServiceService.getAll());
+    }
+
+    @GetMapping("/dependency-graph")
+    public ResponseEntity<ServiceDependencyGraph> getDependencyGraph() {
+        return ResponseEntity.ok(monitoredServiceService.getDependencyGraph());
     }
 
     @GetMapping("/{id}")
